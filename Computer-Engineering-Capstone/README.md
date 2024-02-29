@@ -18,3 +18,5 @@ Here is how our app works:
    7. Set rules for the maximum number of movies a user can rent.
    8. List user payment history and previous rental history.
    9. In the user account settings, user can update their personal information, such as their name, email, password, and account balance.
+
+//Contributor: Mehul
