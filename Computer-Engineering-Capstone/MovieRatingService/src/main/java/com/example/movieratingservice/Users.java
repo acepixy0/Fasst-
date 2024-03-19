@@ -1,13 +1,16 @@
 package com.example.movieratingservice;
 //This is a file
 public class Users {
+
+    private String uuid;
     private String firstName;
     private String lastName;
     private String email;
     private String password;
     private double balance;
     //Default Constructor
-    public void users(){
+    public Users(){
+        this.uuid = "";
         this.firstName = "";
         this.lastName = "";
         this.email = "";
@@ -15,7 +18,7 @@ public class Users {
         this.balance = 0.0;
     }
     //Parametric Constructor
-    public void users(String first, String last, String email, String pass, double balance){
+    public Users(String first, String last, String email, String pass, double balance){
         this.firstName = first;
         this.lastName = last;
         this.email = email;
@@ -30,6 +33,14 @@ public class Users {
         this.email = copy.email;
         this.password = copy.password;
         this.balance = copy.balance;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
     public String getFirstName() {
         return firstName;
