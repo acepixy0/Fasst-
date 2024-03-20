@@ -4,20 +4,41 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class InputValidator {
-    //Validate Email
-    private static boolean isValidEmail(String email) {
-        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-        Pattern pattern = Pattern.compile(emailRegex);
-        Matcher matcher = pattern.matcher(email);
-        return matcher.matches();
-    }
-    //Validate password
+    public static String validateFirstName(String firstName) {
+        if (firstName.isEmpty()) {
+            return "First Name cannot be empty.";
+        } else if (!firstName.matches("^[A-Z][a-zA-Z]*")) {
+            return "First Name should only contain letters.\nThe first letter must be capitalized";
+        }
+        return "";
 
-    private static boolean isValidPassword(String password) {
-        // Password should contain at least 8 characters, including at least one uppercase letter, one lowercase letter, and one digit.
-        String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$";
-        Pattern pattern = Pattern.compile(passwordRegex);
-        Matcher matcher = pattern.matcher(password);
-        return matcher.matches();
     }
+
+    public static String validateLastName(String lastName) {
+        if (lastName.isEmpty()) {
+            return "Last Name cannot be empty.";
+        } else if (!lastName.matches("^[A-Z][a-zA-Z'-]*$")) {
+            return "Last Name should only contain letters.\nThe first letter must be capitalized. The apostrophes or hyphens is allowed in the last name.";
+        }
+        return "";
+    }
+
+    public static String validateEmail(String email) {
+        if (email.isEmpty()) {
+            return "Email cannot be empty.";
+        } else if (!email.matches("^[a-z0-9]+@[a-z0-9]+\\.[a-z]{2,4}$")) {
+            return "Email must contain a-z or 0-9.\nThe domain extension allows 2-4 letters.";
+        }
+        return "";
+    }
+
+    public static String validatePassword(String password) {
+        if (password.isEmpty()) {
+            return "Password cannot be empty.";
+        } else if (!password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")) {
+            return "Password must be 8 characters long and include at least one uppercase letter, one lowercase letter, and one symbol.";
+        }
+        return "";
+    }
+
 }
