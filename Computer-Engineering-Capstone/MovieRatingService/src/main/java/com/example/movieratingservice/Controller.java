@@ -1,10 +1,13 @@
 package com.example.movieratingservice;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
+
 
 public class Controller {
     @FXML
     private Label welcomeText;
+    private ProgressBar progressBar;
 
     public void initialize() {
 
@@ -41,6 +44,10 @@ public class Controller {
         UserManager um = new UserManager();
         String msg = um.updateUserPassword("6243e742-c96f-4d71-bd0c-8869a4708f8b", "Pwerty12345$", "Qwerty123@");
         System.out.println(msg);
+    }
+
+    public ProgressBar getProgressBar() {
+        return progressBar;
     }
 
     @FXML
