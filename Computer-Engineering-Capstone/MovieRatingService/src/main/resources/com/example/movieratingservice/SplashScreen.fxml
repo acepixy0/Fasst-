@@ -9,7 +9,8 @@
     <!-- Splash Screen Image -->
     <ImageView>
         <image>
-            <Image url="splash_image.jpg"/>
+            //file path to image
+            <Image url="C:\Users\Nathan J. Hagood\IdeaProjects\Capstone-Project\Computer-Engineering-Capstone\MovieRatingService\src\main\resources\com\example\movieratingservice\movie image.jpg"/>
         </image>
     </ImageView>
 
