@@ -39,14 +39,8 @@ public class SplashScreen extends Application {
 
         loadDataTask.setOnSucceeded(event -> {
             primaryStage.hide();
-            Application mainApp = new Application();
-            Stage mainStage = new Stage();
-            try {
-                mainApp.start(mainStage);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            mainStage.show();
+            // Start the main application
+            Application.launch(Application.class);
         });
 
         new Thread(loadDataTask).start();
