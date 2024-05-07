@@ -1,59 +1,45 @@
 package com.example.movieratingservice;
 
+import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.concurrent.Task;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class SplashScreen extends Application {
+public class SplashScreen implements Initializable{
+    @FXML
+    private ImageView splashImageView;
+    @FXML private ProgressBar progressBar;
 
+    private MainApplication mainApp;
+
+    /**
+     * @param location
+     * @param resources
+     */
     @Override
-    public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("SplashScreen.fxml"));
-        Parent root = loader.load();
-
-        ImageView splashImageView = (ImageView) loader.getNamespace().get("splashImageView");
-        ProgressBar progressBar = (ProgressBar) loader.getNamespace().get("progressBar");
-
-        splashImageView.setImage(new Image(getClass().getResourceAsStream("movie image.jpg")));
-
-        Task<Void> loadDataTask = new Task<Void>() {
-            @Override
-            protected Void call() throws Exception {
-                for (int i = 0; i <= 100; i++) {
-                    updateProgress(i, 100);
-                    Thread.sleep(50);
-                }
-                return null;
-            }
-        };
-
-        progressBar.progressProperty().bind(loadDataTask.progressProperty());
-
-        loadDataTask.setOnSucceeded(event -> {
-            primaryStage.hide();
-            // Start the main application
-            Application.launch(Application.class);
-        });
-
-        new Thread(loadDataTask).start();
-
-        Scene scene = new Scene(root);
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Splash Screen");
-        primaryStage.setWidth(600);
-        primaryStage.setHeight(400);
-        primaryStage.show();
+    public void initialize(URL location, ResourceBundle resources) {
+        PauseTransition delay = new PauseTransition(Duration.seconds(3));
+        delay.setOnFinished(event -> mainApp.showMainStage());
+        delay.play();
     }
 
-    public static void main(String[] args) {
-        launch(args);
+    public void setMainApplication(MainApplication app) {
+        this.mainApp = app;
     }
+
+
+
 }
