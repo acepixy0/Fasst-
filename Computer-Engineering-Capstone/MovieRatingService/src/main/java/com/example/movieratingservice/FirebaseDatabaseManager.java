@@ -7,9 +7,7 @@ import com.google.auth.oauth2.GoogleCredentials;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class FirebaseDatabaseManager {
 
@@ -148,6 +146,242 @@ public class FirebaseDatabaseManager {
     public void setUserID(String userID) {
         this.userID = userID;
     }
+
+    public void getAllMovies(DataCallback callback) {
+        DatabaseReference ref = getDatabase().getReference("movies");
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    StringBuilder allMovies = new StringBuilder();
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Movies movie = snapshot.getValue(Movies.class);
+                        if (movie != null) {
+                            allMovies.append(movie.toString()).append("\n");
+                        } else {
+                            System.out.println("Failed to parse a movie data.");
+                        }
+                    }
+                    callback.onSuccess(allMovies.toString());
+                } else {
+                    callback.onFailure("No movies found");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                callback.onFailure(databaseError.getMessage());
+            }
+        });
+    }
+
+
+    public void getMovieById(String movieId, DataCallback callback) {
+        System.out.println("Fetching movie with ID: " + movieId);
+        DatabaseReference ref = getDatabase().getReference("movies").child(movieId);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    System.out.println("Data snapshot for movie exists.");
+                    try {
+                        Movies movie = dataSnapshot.getValue(Movies.class);
+                        if (movie != null) {
+                            System.out.println("Successfully retrieved movie: " + movie.getTitle());
+                            callback.onSuccess(movie.toString());
+                        } else {
+                            System.out.println("Failed to parse movie data.");
+                            callback.onFailure("Failed to parse movie data");
+                        }
+                    } catch (Exception e) {
+                        System.out.println("Error processing data: " + e.getMessage());
+                        callback.onFailure("Error processing data: " + e.getMessage());
+                    }
+                } else {
+                    System.out.println("No movie found with ID: " + movieId);
+                    callback.onFailure("Movie not found");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("Database error: " + databaseError.getMessage());
+                callback.onFailure(databaseError.getMessage());
+            }
+        });
+    }
+
+
+    public void searchMoviesByTitle(String title, DataCallback callback) {
+        DatabaseReference ref = getDatabase().getReference("movies");
+        Query query = ref.orderByChild("original_title").equalTo(title);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    StringBuilder movies = new StringBuilder();
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Movies movie = snapshot.getValue(Movies.class);
+                        if (movie != null) {
+                            movies.append(movie.toString()).append("\n");
+                        } else {
+                            System.out.println("Failed to parse movie data.");
+                        }
+                    }
+                    callback.onSuccess(movies.toString());
+                } else {
+                    callback.onFailure("No movies found with the title: " + title);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                callback.onFailure(databaseError.getMessage());
+            }
+        });
+    }
+
+    public void getAllGenres(DataCallback callback) {
+        DatabaseReference ref = getDatabase().getReference("movie_genres");
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    StringBuilder allGenres = new StringBuilder();
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        MovieGenre genre = snapshot.getValue(MovieGenre.class);
+                        if (genre != null) {
+                            genre.setUuid(snapshot.getKey());
+                            allGenres.append(genre.toString()).append("\n");
+                        } else {
+                            System.out.println("Failed to parse genre data.");
+                        }
+                    }
+                    callback.onSuccess(allGenres.toString());
+                } else {
+                    callback.onFailure("No genres found");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                callback.onFailure(databaseError.getMessage());
+            }
+        });
+    }
+
+    public void getGenreById(String genreId, DataCallback callback) {
+        DatabaseReference ref = getDatabase().getReference("movie_genres").child(genreId);
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    MovieGenre genre = dataSnapshot.getValue(MovieGenre.class);
+                    if (genre != null) {
+                        genre.setUuid(genreId);  // Set the UUID for completeness
+                        callback.onSuccess(genre.toString());
+                    } else {
+                        callback.onFailure("Failed to parse genre data");
+                    }
+                } else {
+                    callback.onFailure("Genre not found");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                callback.onFailure(databaseError.getMessage());
+            }
+        });
+    }
+
+
+    public void getRentedMoviesByUserId(String userId, DataCallback callback) {
+        DatabaseReference ref = getDatabase().getReference("rented_movies");
+        Query query = ref.orderByChild("user_id").equalTo(userId);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    StringBuilder rentedMovies = new StringBuilder();
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        RentedMovie rentedMovie = snapshot.getValue(RentedMovie.class);
+                        if (rentedMovie != null) {
+                            rentedMovies.append(rentedMovie.toString()).append("\n");
+                        } else {
+                            System.out.println("Failed to parse rented movie data.");
+                        }
+                    }
+                    callback.onSuccess(rentedMovies.toString());
+                } else {
+                    callback.onFailure("No rented movies found for user ID: " + userId);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                callback.onFailure(databaseError.getMessage());
+            }
+        });
+    }
+
+    public void getUserRentalByStatus(String userId, String status, DataCallback callback) {
+        DatabaseReference ref = getDatabase().getReference("rented_movies");
+        Query query = ref.orderByChild("user_id").equalTo(userId);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    StringBuilder filteredMovies = new StringBuilder();
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        RentedMovie rentedMovie = snapshot.getValue(RentedMovie.class);
+                        if (rentedMovie != null && rentedMovie.getStatus().equals(status)) {
+                            filteredMovies.append(rentedMovie.toString()).append("\n");
+                        }
+                    }
+                    if (filteredMovies.length() > 0) {
+                        callback.onSuccess(filteredMovies.toString());
+                    } else {
+                        callback.onFailure("No rented movies found with status: " + status);
+                    }
+                } else {
+                    callback.onFailure("No rented movies found for user ID: " + userId);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                callback.onFailure(databaseError.getMessage());
+            }
+        });
+    }
+        public void isRentedBefore(String userId, String movieId, DataCallback callback) {
+            DatabaseReference ref = getDatabase().getReference("rented_movies");
+            Query query = ref.orderByChild("user_id").equalTo(userId);
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        boolean isRented = false;
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            RentedMovie rentedMovie = snapshot.getValue(RentedMovie.class);
+                            if (rentedMovie != null && rentedMovie.getMovie_id().equals(movieId)) {
+                                isRented = true;
+                                break;
+                            }
+                        }
+                        callback.onSuccess(String.valueOf(isRented));
+                    } else {
+                        callback.onSuccess("false");
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    callback.onFailure(databaseError.getMessage());
+                }
+            });
+        }
 
 }
 
