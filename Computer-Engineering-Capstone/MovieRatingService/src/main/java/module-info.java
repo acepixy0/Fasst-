@@ -7,6 +7,6 @@ module com.example.movieratingservice {
     requires com.google.auth;
     requires com.google.auth.oauth2;
 
-    opens com.example.movieratingservice to javafx.fxml;
+    opens com.example.movieratingservice to javafx.fxml, firebase.admin;
     exports com.example.movieratingservice;
 }
