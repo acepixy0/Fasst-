@@ -10,9 +10,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-
-public class SplashScreen extends Application {
+public class SplashScreenController extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
