@@ -4,8 +4,9 @@ public class MovieManager {
 
     private FirebaseDatabaseManager db;
 
+
     public MovieManager() {
-        this.db = new FirebaseDatabaseManager();
+        this.db = FirebaseDatabaseManager.getInstance();
     }
 
     public void getAllMovies(DataCallback callback) {
