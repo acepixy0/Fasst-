@@ -1,45 +1,53 @@
 package com.example.movieratingservice;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import java.io.IOException;
+
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.control.Button;
 import javafx.stage.Stage;
+
 public class MainPageController {
-    @FXML
-    private VBox root;
-    @FXML
-    private TextField searchField;
-    @FXML
-    private ComboBox<String> filterComboBox;
-    @FXML
-    private ListView<String> movieListView;
-    private ObservableList<String> movies = FXCollections.observableArrayList(
-            "Movie 1", "Movie 2", "Movie 3", "Movie 4", "Movie 5",
-            "Movie 6", "Movie 7", "Movie 8", "Movie 9", "Movie 10"
-    );
 
     @FXML
-    public void initialize() {
-        searchField.setPromptText("Search movies...");
-        filterComboBox.getItems().addAll("Action", "Comedy", "Drama", "Sci-Fi", "Thriller");
-        filterComboBox.setPromptText("Filter by Genre");
+    private Button loginScreenBTN;
+    @FXML
+    private Button registerScreenBTN;
 
-        movieListView.setPrefSize(400, 300);
-        movieListView.setPlaceholder(new Label("No movies found"));
-        movieListView.setItems(movies);
 
-        searchField.textProperty().addListener((observable, oldValue, newValue) -> updateFilteredItems(newValue, null));
-        filterComboBox.setOnAction(event -> updateFilteredItems(searchField.getText(), filterComboBox.getSelectionModel().getSelectedItem()));
+    @FXML
+    private void switchToRegister(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/movieratingservice/RegisterScreen.fxml"));
+            Parent registerScreen = loader.load();
+
+            Stage stage = (Stage) registerScreenBTN.getScene().getWindow();
+
+            Scene scene = new Scene(registerScreen);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-    private void updateFilteredItems(String searchText, String genre) {
-        ObservableList<String> filteredMovies = movies.filtered(movie ->
-                (searchText == null || searchText.isEmpty() || movie.toLowerCase().contains(searchText.toLowerCase())) &&
-                        (genre == null || movie.toLowerCase().contains(genre.toLowerCase()))
-        );
-        movieListView.setItems(filteredMovies);
+
+    @FXML
+    private void switchToLogin(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/movieratingservice/LoginScreen.fxml"));
+            Parent loginScreen = loader.load();
+
+            Stage stage = (Stage) loginScreenBTN.getScene().getWindow();
+
+            Scene scene = new Scene(loginScreen);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 }

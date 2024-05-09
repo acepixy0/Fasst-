@@ -35,10 +35,11 @@ public class InputValidator {
     public static String validatePassword(String password) {
         if (password.isEmpty()) {
             return "Password cannot be empty.";
-        } else if (!password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")) {
-            return "Password must be 8 characters long and include at least one uppercase letter, one lowercase letter, and one symbol.";
+        } else if (!password.matches(".{8,}")) {
+            return "Password must be 8 characters long or more.";
         }
         return "";
     }
+
 
 }

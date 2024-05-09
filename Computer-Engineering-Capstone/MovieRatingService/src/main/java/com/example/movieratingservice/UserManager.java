@@ -4,6 +4,7 @@ public class UserManager {
 
     private FirebaseDatabaseManager db;
     public UserManager() {
+
         this.db = new FirebaseDatabaseManager();
     }
 
@@ -35,6 +36,11 @@ public class UserManager {
 
         return db.loginUser(email, password);
     }
+
+    public Users getUserDetails(String userId) {
+        return db.getUserDetails(userId);
+    }
+
 
     public String updateUserDetails(String userId, String firstName, String lastName, String email) {
         String msg;
