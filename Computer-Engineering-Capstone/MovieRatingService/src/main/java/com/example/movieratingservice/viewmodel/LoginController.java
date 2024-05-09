@@ -1,4 +1,6 @@
-package com.example.movieratingservice;
+package com.example.movieratingservice.viewmodel;
+import com.example.movieratingservice.util.DataCallback;
+import com.example.movieratingservice.model.Users;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 

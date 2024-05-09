@@ -1,4 +1,4 @@
-package com.example.movieratingservice;
+package com.example.movieratingservice.model;
 
 import java.util.ArrayList;
 import java.util.List;

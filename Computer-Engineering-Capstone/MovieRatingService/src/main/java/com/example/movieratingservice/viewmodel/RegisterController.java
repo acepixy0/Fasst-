@@ -1,6 +1,8 @@
-package com.example.movieratingservice;
+package com.example.movieratingservice.viewmodel;
 
 import java.io.IOException;
+
+import com.example.movieratingservice.model.Users;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

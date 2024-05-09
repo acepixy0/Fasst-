@@ -1,4 +1,4 @@
-package com.example.movieratingservice;
+package com.example.movieratingservice.viewmodel;
 
 import java.io.IOException;
 

@@ -1,5 +1,10 @@
-package com.example.movieratingservice;
+package com.example.movieratingservice.database;
 
+import com.example.movieratingservice.util.DataCallback;
+import com.example.movieratingservice.model.MovieGenre;
+import com.example.movieratingservice.model.Movies;
+import com.example.movieratingservice.model.RentedMovie;
+import com.example.movieratingservice.model.Users;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.database.*;

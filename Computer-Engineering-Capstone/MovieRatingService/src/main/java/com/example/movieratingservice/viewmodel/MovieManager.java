@@ -1,4 +1,7 @@
-package com.example.movieratingservice;
+package com.example.movieratingservice.viewmodel;
+
+import com.example.movieratingservice.database.FirebaseDatabaseManager;
+import com.example.movieratingservice.util.DataCallback;
 
 public class MovieManager {
 

@@ -1,4 +1,8 @@
-package com.example.movieratingservice;
+package com.example.movieratingservice.viewmodel;
+
+import com.example.movieratingservice.database.FirebaseDatabaseManager;
+import com.example.movieratingservice.model.Users;
+import com.example.movieratingservice.validation.InputValidator;
 
 public class UserManager {
 
