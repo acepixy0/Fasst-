@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="683.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.movieratingservice.DashboardController">
+   <left>
+      <VBox prefHeight="400.0" prefWidth="184.0" spacing="20.0" BorderPane.alignment="CENTER">
+<children>
+<Button fx:id="homeBtn" mnemonicParsing="false" onAction="#switchToHome" prefHeight="48.0" prefWidth="140.0" text="Home">
+    <font>
+        <Font size="15.0" />
+    </font>
+</Button>
+<Button fx:id="allMoviesBtn" mnemonicParsing="false" onAction="#switchToAllMovies" prefHeight="48.0" prefWidth="140.0" text="All Movies">
+    <font>
+        <Font size="15.0" />
+    </font>
+</Button>
+<Button fx:id="myRentalBtn" layoutX="10.0" layoutY="58.0" mnemonicParsing="false" onAction="#switchToMyRents" prefHeight="48.0" prefWidth="140.0" text="My Rentals">
+    <font>
+        <Font size="15.0" />
+    </font>
+</Button>
+<Button fx:id="paymentHistoryBtn" mnemonicParsing="false" onAction="#switchToPaymenthistory" prefHeight="48.0" prefWidth="141.0" text="Payment History">
+    <font>
+        <Font size="15.0" />
+    </font>
+</Button>
+<Button fx:id="accountSettingsBtn" mnemonicParsing="false" onAction="#switchToAccountSettings" prefHeight="48.0" prefWidth="139.0" text="Account Settings">
+    <font>
+        <Font size="15.0" />
+    </font>
+</Button>
+</children>
+<padding>
+<Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+</padding>
+        </VBox>
+        </left>
+<top>
+<Text strokeType="OUTSIDE" strokeWidth="0.0" text="Dashboard" textAlignment="CENTER" BorderPane.alignment="CENTER">
+    <font>
+        <Font size="25.0" />
+    </font>
+    <BorderPane.margin>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+    </BorderPane.margin>
+</Text>
+</top>
+<center>
+<VBox BorderPane.alignment="CENTER">
+    <children>
+        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome, you have sucessfully logged in.">
+            <font>
+                <Font size="19.0" />
+            </font>
+        </Text>
+    </children>
+    <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+    </padding>
+</VBox>
+</center>
+        </BorderPane>

@@ -20,14 +20,15 @@ public class FirebaseDatabaseManager {
 
     private void initializeFirebase() {
         try {
+            if (FirebaseApp.getApps().isEmpty()) {
+                FileInputStream serviceAccount = new FileInputStream("Computer-Engineering-Capstone/movieapp-e3f11-firebase-adminsdk-vskir-a4ead6f6a2.json");
+                FirebaseOptions options = new FirebaseOptions.Builder()
+                        .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                        .setDatabaseUrl("https://movieapp-e3f11-default-rtdb.firebaseio.com")
+                        .build();
 
-            FileInputStream serviceAccount = new FileInputStream("Computer-Engineering-Capstone/movieapp-e3f11-firebase-adminsdk-vskir-a4ead6f6a2.json");
-            FirebaseOptions options = new FirebaseOptions.Builder()
-                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                    .setDatabaseUrl("https://movieapp-e3f11-default-rtdb.firebaseio.com")
-                    .build();
-
-            FirebaseApp.initializeApp(options);
+                FirebaseApp.initializeApp(options);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -41,14 +42,15 @@ public class FirebaseDatabaseManager {
     public String registerUser(Users user) {
         String uuid = UUID.randomUUID().toString();
         Map<String, Object> userData = new HashMap<>();
-        userData.put("first_name", user.getFirstName());
-        userData.put("last_name", user.getLastName());
+        userData.put("firstName", user.getFirstName());
+        userData.put("lastName", user.getLastName());
         userData.put("email", user.getEmail());
         userData.put("password", user.getPassword());
         userData.put("balance", user.getBalance());
         DatabaseReference ref = getDatabase().getReference("users");
         ref.child(uuid).setValueAsync(userData);
-        return "User registered successfully with ID: " + uuid;
+        userID = uuid;
+        return "User registered successfully";
     }
 
     public String loginUser(String email, String password) {
@@ -66,11 +68,11 @@ public class FirebaseDatabaseManager {
                             result[0] = "User logged in successfully";
                             userID = snapshot.getKey();
                         } else {
-                            result[0] = "incorrect password";
+                            result[0] = "Incorrect Password. Please Check Again";
                         }
                     }
                 } else {
-                    result[0] = "account doesn't exist";
+                    result[0] = "Account Doesn't Exist. Please Check Again";
                 }
                 isCompleted[0] = true;
             }
@@ -91,6 +93,39 @@ public class FirebaseDatabaseManager {
         }
 
         return result[0];
+    }
+
+
+    public Users getUserDetails(String userId) {
+        DatabaseReference ref = getDatabase().getReference("users").child(userId);
+        final Users[] user = {null};
+        final boolean[] isCompleted = {false};
+
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    user[0] = dataSnapshot.getValue(Users.class);
+                }
+                isCompleted[0] = true;
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println(databaseError.getMessage());
+                isCompleted[0] = true;
+            }
+        });
+
+        while (!isCompleted[0]) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+        return user[0];
     }
 
 
