@@ -8,6 +8,7 @@ import com.google.firebase.FirebaseOptions;
 import com.google.auth.oauth2.GoogleCredentials;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -20,6 +21,9 @@ public class FirebaseDatabaseManager {
     private FirebaseApp firebaseApp;
 
     private DatabaseReference database;
+
+    private String lastRegisteredUserId;  // Field to store the UUID of the last registered user
+
 
     private ExecutorService executor = Executors.newCachedThreadPool();
 
@@ -254,6 +258,10 @@ public class FirebaseDatabaseManager {
                 .thenApply(ignore -> "User registered successfully with ID: " + uuid);
     }
 
+    public String getLastRegisteredUserId() {
+        return lastRegisteredUserId;
+    }
+
     public CompletableFuture<String> loginUser(String email, String password) {
         DatabaseReference ref = getDatabase().getReference("users");
         CompletableFuture<String> resultFuture = new CompletableFuture<>();
@@ -283,6 +291,62 @@ public class FirebaseDatabaseManager {
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 resultFuture.completeExceptionally(new Exception(databaseError.getMessage()));
+            }
+        });
+
+        return resultFuture;
+    }
+
+    public CompletableFuture<String> updateUserDetails(String userId, String firstName, String lastName, String email) {
+        DatabaseReference ref = getDatabase().getReference("users").child(userId);
+
+        // Prepare the data to update
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("first_name", firstName);
+        updates.put("last_name", lastName);
+        updates.put("email", email);
+
+        // Update the data asynchronously
+        ApiFuture<Void> future = ref.updateChildrenAsync(updates);
+
+        // Convert ApiFuture<Void> to CompletableFuture<String>
+        return FirebaseUtil.toCompletableFuture(future)
+                .thenApply(ignore -> "User details updated successfully for user ID: " + userId)
+                .exceptionally(e -> "Failed to update user details: " + e.getMessage());
+    }
+
+    public CompletableFuture<String> updateUserPassword(String userId, String currentPassword, String newPassword) {
+        DatabaseReference ref = getDatabase().getReference("users").child(userId).child("password");
+
+        // Fetch the current password and then update if it matches
+        CompletableFuture<String> resultFuture = new CompletableFuture<>();
+
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    String storedPassword = dataSnapshot.getValue(String.class);
+                    if (storedPassword != null && storedPassword.equals(currentPassword)) {
+                        // Current password is correct, proceed to update to new password
+                        ApiFuture<Void> updateFuture = ref.setValueAsync(newPassword);
+                        // Convert ApiFuture to CompletableFuture
+                        FirebaseUtil.toCompletableFuture(updateFuture).thenAccept(voidResult -> {
+                            resultFuture.complete("Password updated successfully.");
+                        }).exceptionally(e -> {
+                            resultFuture.completeExceptionally(new RuntimeException("Failed to update password.", e));
+                            return null;
+                        });
+                    } else {
+                        resultFuture.complete("Current password is incorrect.");
+                    }
+                } else {
+                    resultFuture.complete("User not found.");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                resultFuture.completeExceptionally(new RuntimeException("Database error: " + databaseError.getMessage()));
             }
         });
 
