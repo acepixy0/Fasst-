@@ -1,16 +1,35 @@
-package com.example.movieratingservice;
+package com.example.movieratingservice.viewmodel;
+import com.example.movieratingservice.models.MovieManager;
+import com.example.movieratingservice.models.UserManager;
+import com.example.movieratingservice.util.DataCallback;
+import com.example.movieratingservice.model.Users;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
 
-import java.util.concurrent.CompletableFuture;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 
 public class LoginController {
+
     @FXML
-    private Label welcomeText;
-    private ProgressBar progressBar;
+    private TextField emailTF;
+    @FXML
+    private TextField passwordTF;
+    @FXML
+    private Button accountLoginBtn;
+    @FXML
+    private Button splashBtn;
+
+    private Alert alert;
+    private String userID;
+
 
     public void initialize() {
 
@@ -18,7 +37,7 @@ public class LoginController {
 
         /* Account management */
         //userRegistration();
-        //userLogin();
+        //userLogin(); -- done
         //updateUserDetails();
         //updateUserPassword();
 
@@ -38,6 +57,74 @@ public class LoginController {
 
 
     }
+
+    @FXML
+    private void accountLoginHandler(ActionEvent event) {
+        UserManager um = new UserManager();
+        String email = emailTF.getText();
+        String password = passwordTF.getText();
+        String loginMsg = um.loginUser(email, password);
+
+        if (!loginMsg.equals("User logged in successfully")) {
+            inputErrorAlert(loginMsg);
+            return;
+        }
+
+        handleSuccessfulLogin(um);
+    }
+
+    private void handleSuccessfulLogin(UserManager um) {
+        Users user = um.getUserDetails(um.userID());
+        if (user == null) {
+            System.out.println("Failed to fetch user details.");
+            return;
+        }
+
+        System.out.println("User logged in successfully \n" + user.toString());
+        switchToDashboard();
+    }
+
+    private void switchToDashboard() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/movieratingservice/DashboardScreen.fxml"));
+            Parent dashboardScreen = loader.load();
+            Stage stage = (Stage) accountLoginBtn.getScene().getWindow();
+            Scene scene = new Scene(dashboardScreen);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error loading dashboard.");
+        }
+    }
+
+
+
+    private void inputErrorAlert(String inputErrors) {
+        alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Warning");
+        alert.setHeaderText("Invalid Input");
+        alert.setContentText(inputErrors.toString());
+        alert.show();
+
+    }
+
+    @FXML
+    private void switchToSplash(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/movieratingservice/SplashScreen.fxml"));
+            Parent loginScreen = loader.load();
+
+            Stage stage = (Stage) splashBtn.getScene().getWindow();
+
+            Scene scene = new Scene(loginScreen);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
     public void isRentedBefore(){
@@ -178,40 +265,16 @@ public class LoginController {
         System.out.println("done");
     }
 
-    public void userRegistration(){
-        UserManager um = new UserManager();
-        String msg = String.valueOf(um.registerUser("Jo", "Jo", "jom@j.com", "Qwerty123@", 100.0));
-        System.out.println(msg);
-    }
-
-    public void userLogin(){
-        UserManager um = new UserManager();
-        String msg = String.valueOf(um.loginUser("jj@jj.com", "Pwerty12345$"));
-        System.out.println(msg);
-        System.out.println(um.userID());
-    }
 
     public void updateUserDetails() {
         UserManager um = new UserManager();
-        CompletableFuture<String> msg = um.updateUserDetails("6243e742-c96f-4d71-bd0c-8869a4708f8b", "Jjrr", "Jjjj", "jj@jj.com");
+        String msg = um.updateUserDetails("6243e742-c96f-4d71-bd0c-8869a4708f8b", "Jjrr", "Jjjj", "jj@jj.com");
         System.out.println(msg);
     }
 
     public void updateUserPassword() {
         UserManager um = new UserManager();
-        CompletableFuture<String> msg = um.updateUserPassword("6243e742-c96f-4d71-bd0c-8869a4708f8b", "Pwerty12345$", "Qwerty123@");
+        String msg = um.updateUserPassword("6243e742-c96f-4d71-bd0c-8869a4708f8b", "Pwerty12345$", "Qwerty123@");
         System.out.println(msg);
-    }
-
-    public ProgressBar getProgressBar() {
-        return progressBar;
-    }
-
-    @FXML
-    protected void onHelloButtonClick() {
-        welcomeText.setText("Welcome to JavaFX Application!");
-    }
-
-    public void handleLogin(ActionEvent actionEvent) {
     }
 }

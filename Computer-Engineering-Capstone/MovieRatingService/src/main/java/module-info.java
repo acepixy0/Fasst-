@@ -10,4 +10,10 @@ module com.example.movieratingservice {
 
     opens com.example.movieratingservice to javafx.fxml, firebase.admin;
     exports com.example.movieratingservice;
+    exports com.example.movieratingservice.controllers;
+    opens com.example.movieratingservice.controllers to firebase.admin, javafx.fxml;
+    exports com.example.movieratingservice.models;
+    opens com.example.movieratingservice.models to firebase.admin, javafx.fxml;
+    exports com.example.movieratingservice.firebase;
+    opens com.example.movieratingservice.firebase to firebase.admin, javafx.fxml;
 }

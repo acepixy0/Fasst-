@@ -1,4 +1,4 @@
-package com.example.movieratingservice;
+package com.example.movieratingservice.controllers;
 
 import javafx.application.Application;
 import javafx.concurrent.Task;
@@ -44,6 +44,7 @@ public class SplashScreenController extends Application {
         new Thread(loadDataTask).start();
 
         Scene scene = new Scene(root);
+        scene.getStylesheets().add(getClass().getResource("/path/to/style.css").toExternalForm());
         primaryStage.setScene(scene);
         primaryStage.setTitle("Splash Screen");
         primaryStage.setWidth(600);

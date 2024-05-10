@@ -1,4 +1,4 @@
-package com.example.movieratingservice;
+package com.example.movieratingservice.controllers;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

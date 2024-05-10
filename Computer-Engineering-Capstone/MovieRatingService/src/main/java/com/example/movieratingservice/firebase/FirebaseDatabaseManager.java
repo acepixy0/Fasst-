@@ -1,11 +1,13 @@
-package com.example.movieratingservice;
+package com.example.movieratingservice.firebase;
 
+import com.example.movieratingservice.*;
 import com.google.api.core.ApiFuture;
-import com.google.api.core.ApiFutures;
 import com.google.firebase.database.*;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.firebase.remoteconfig.User;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
@@ -356,4 +358,5 @@ public class FirebaseDatabaseManager {
     public FirebaseDatabase getDatabase() {
         return FirebaseDatabase.getInstance(firebaseApp);
     }
+
 }

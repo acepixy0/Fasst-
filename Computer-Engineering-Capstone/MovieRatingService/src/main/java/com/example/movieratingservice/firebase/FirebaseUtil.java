@@ -1,4 +1,4 @@
-package com.example.movieratingservice;
+package com.example.movieratingservice.firebase;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;

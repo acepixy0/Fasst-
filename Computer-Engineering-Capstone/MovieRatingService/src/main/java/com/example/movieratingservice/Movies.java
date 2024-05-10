@@ -1,9 +1,11 @@
 package com.example.movieratingservice;
 
+import com.example.movieratingservice.models.MovieManager;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Movies {
+public class Movies extends MovieManager {
     private String US_certification;
     private boolean adult;
     private String backdrop_path;

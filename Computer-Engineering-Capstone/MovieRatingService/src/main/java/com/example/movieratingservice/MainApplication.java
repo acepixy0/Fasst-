@@ -1,4 +1,5 @@
 package com.example.movieratingservice;
+import com.example.movieratingservice.controllers.SplashScreenController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -28,7 +29,6 @@ public class MainApplication extends Application {
         primaryStage.show();
 
         SplashScreenController controller = loader.getController();
-        controller.setMainApplication(this);
     }
     public void showMainStage() {
         try {

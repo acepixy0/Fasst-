@@ -1,6 +1,8 @@
 package com.example.movieratingservice;
 
-public class MovieGenre {
+import com.example.movieratingservice.models.MovieManager;
+
+public class MovieGenre extends MovieManager {
 
     private String uuid;
     private String name;
