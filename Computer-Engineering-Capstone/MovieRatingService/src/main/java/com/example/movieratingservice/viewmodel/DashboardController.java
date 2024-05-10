@@ -1,13 +1,18 @@
 package com.example.movieratingservice.viewmodel;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.stage.Stage;
 
-public class DashboardController{
+public class DashboardController extends BaseController {
 
     @FXML
     private Button homeBtn;
@@ -26,15 +31,18 @@ public class DashboardController{
     }
 
     @FXML
-    private void switchToHome(ActionEvent event) {
+    private void handleHomeButtonAction(ActionEvent event) throws IOException {
+        switchToHome(event);
     }
 
     @FXML
-    private void switchToAllMovies(ActionEvent event) {
+    private void handleAllMoviesButtonAction(ActionEvent event) throws IOException {
+        switchToAllMovies(event);
     }
 
     @FXML
-    private void switchToMyRents(ActionEvent event) {
+    private void handleMyRentalButtonAction(ActionEvent event) throws IOException {
+        switchToMyRentals(event);
     }
 
     @FXML

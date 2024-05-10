@@ -12,11 +12,14 @@ import com.google.auth.oauth2.GoogleCredentials;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class FirebaseDatabaseManager {
 
-    private String userID;
+    private static String userID;
+    private List<Movies> allMovies;
 
 
     public FirebaseDatabaseManager() {
@@ -54,7 +57,7 @@ public class FirebaseDatabaseManager {
         userData.put("balance", user.getBalance());
         DatabaseReference ref = getDatabase().getReference("users");
         ref.child(uuid).setValueAsync(userData);
-        userID = uuid;
+        this.userID = uuid;
         return "User registered successfully";
     }
 
@@ -71,7 +74,7 @@ public class FirebaseDatabaseManager {
                         String storedPassword = snapshot.child("password").getValue(String.class);
                         if (storedPassword.equals(password)) {
                             result[0] = "User logged in successfully";
-                            userID = snapshot.getKey();
+                            setUserID(snapshot.getKey());
                         } else {
                             result[0] = "Incorrect Password. Please Check Again";
                         }
@@ -184,6 +187,7 @@ public class FirebaseDatabaseManager {
     }
 
     public void setUserID(String userID) {
+
         this.userID = userID;
     }
 
@@ -193,16 +197,17 @@ public class FirebaseDatabaseManager {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    StringBuilder allMovies = new StringBuilder();
+                    allMovies = new ArrayList<Movies>();
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
                         Movies movie = snapshot.getValue(Movies.class);
                         if (movie != null) {
-                            allMovies.append(movie.toString()).append("\n");
+                            allMovies.add(movie);
                         } else {
                             System.out.println("Failed to parse a movie data.");
                         }
                     }
-                    callback.onSuccess(allMovies.toString());
+                    callback.onSuccess("Movies Successfully Fetched");
                 } else {
                     callback.onFailure("No movies found");
                 }
@@ -215,6 +220,55 @@ public class FirebaseDatabaseManager {
         });
     }
 
+    public void getRentedMovies(DataCallback callback) {
+        DatabaseReference rentedMoviesRef = getDatabase().getReference("rented_movies");
+        Query userRentedMoviesQuery = rentedMoviesRef.orderByChild("user_id").equalTo(this.userID);
+
+        userRentedMoviesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    allMovies = new ArrayList<>();
+                    AtomicInteger moviesCount = new AtomicInteger((int) dataSnapshot.getChildrenCount());
+                    for (DataSnapshot rentedMovieSnapshot : dataSnapshot.getChildren()) {
+                        String movieId = rentedMovieSnapshot.child("movie_id").getValue(String.class);
+                        DatabaseReference movieRef = getDatabase().getReference("movies").child(movieId);
+                        movieRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot movieSnapshot) {
+                                Movies movie = movieSnapshot.getValue(Movies.class);
+                                if (movie != null) {
+                                    allMovies.add(movie);
+                                } else {
+                                    System.out.println("Failed to parse movie data for movie ID: " + movieId);
+                                }
+                                if (moviesCount.decrementAndGet() == 0) {
+                                    callback.onSuccess("Rented Movies for User Successfully Fetched");
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                System.out.println("Database error: " + databaseError.getMessage());
+                            }
+                        });
+                    }
+                } else {
+                    callback.onFailure("No rented movies found for user ID: " + userID);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                callback.onFailure(databaseError.getMessage());
+            }
+        });
+    }
+
+    public List<Movies> getMovieList() {
+        System.out.println(this.allMovies);
+        return this.allMovies;
+    }
 
     public void getMovieById(String movieId, DataCallback callback) {
         System.out.println("Fetching movie with ID: " + movieId);
@@ -318,7 +372,7 @@ public class FirebaseDatabaseManager {
                 if (dataSnapshot.exists()) {
                     MovieGenre genre = dataSnapshot.getValue(MovieGenre.class);
                     if (genre != null) {
-                        genre.setUuid(genreId);  // Set the UUID for completeness
+                        genre.setUuid(genreId);
                         callback.onSuccess(genre.toString());
                     } else {
                         callback.onFailure("Failed to parse genre data");
@@ -422,6 +476,86 @@ public class FirebaseDatabaseManager {
                 }
             });
         }
+
+    public void rentMovie(String movieId, DataCallback callback) {
+        System.out.println("Movie ID:" + movieId);
+        System.out.println("User ID: " + this.userID);
+        DatabaseReference rentedMoviesRef = getDatabase().getReference("rented_movies");
+        DatabaseReference moviesRef = getDatabase().getReference("movies").child(movieId);
+        DatabaseReference userRef = getDatabase().getReference("users").child(this.userID);
+
+        Query query = rentedMoviesRef.orderByChild("user_id").equalTo(this.userID);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                boolean canRent = true;
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        RentedMovie rentedMovie = snapshot.getValue(RentedMovie.class);
+                        if (rentedMovie != null && rentedMovie.getMovie_id().equals(movieId) && rentedMovie.getStatus().equals("Rented")) {
+                            callback.onFailure("You already have this movie rented.");
+                            canRent = false;
+                            break;
+                        }
+                    }
+                }
+
+                if (canRent) {
+                    moviesRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot movieSnapshot) {
+                            Movies movie = movieSnapshot.getValue(Movies.class);
+                            if (movie != null && movie.getAvailable_copies() > 0) {
+                                userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot userSnapshot) {
+                                        Users user = userSnapshot.getValue(Users.class);
+                                        if (user != null && user.getBalance() >= movie.getPrice()) {
+
+                                            double newBalance = user.getBalance() - movie.getPrice();
+                                            userRef.child("balance").setValueAsync(newBalance);
+                                            moviesRef.child("available_copies").setValueAsync(movie.getAvailable_copies() - 1);
+
+                                            RentedMovie newRental = new RentedMovie();
+                                            newRental.setMovie_id(movieId);
+                                            newRental.setUser_id(userID);
+                                            newRental.setRental_date(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+                                            newRental.setRented_price(String.valueOf(movie.getPrice()));
+                                            newRental.setStatus("Rented");
+
+                                            rentedMoviesRef.push().setValueAsync(newRental);
+
+                                            callback.onSuccess("Movie rented successfully. New Balance: " + newBalance);
+                                        } else {
+                                            callback.onFailure("Insufficient balance to rent this movie.");
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                        callback.onFailure("Failed to get user data: " + databaseError.getMessage());
+                                    }
+                                });
+                            } else {
+                                callback.onFailure("This movie is currently not available for rent.");
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            callback.onFailure("Failed to get movie data: " + databaseError.getMessage());
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                callback.onFailure("Database error: " + databaseError.getMessage());
+            }
+        });
+    }
+
 
 }
 
