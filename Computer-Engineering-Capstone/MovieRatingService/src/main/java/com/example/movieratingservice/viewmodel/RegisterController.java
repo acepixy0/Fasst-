@@ -38,7 +38,7 @@ public class RegisterController {
         String password = passwordTF.getText();
 
         UserManager um = new UserManager();
-        String registerMsg = um.registerUser( fName, lName, email, password, 10.0);
+        String registerMsg = um.registerUser( fName, lName, email, password, 40.00);
 
         if (!registerMsg.equals("User registered successfully")) {
             inputErrorAlert(registerMsg);

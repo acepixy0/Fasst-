@@ -1,4 +1,5 @@
 package com.example.movieratingservice.viewmodel;
+import com.example.movieratingservice.model.Movies;
 import com.example.movieratingservice.util.DataCallback;
 import com.example.movieratingservice.model.Users;
 import javafx.event.ActionEvent;
@@ -13,6 +14,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.List;
 
 public class LoginController {
 
@@ -34,13 +36,13 @@ public class LoginController {
         /* Backend Functions */
 
         /* Account management */
-        //userRegistration();
+        //userRegistration(); -- done
         //userLogin(); -- done
         //updateUserDetails();
         //updateUserPassword();
 
         /* Movies */
-        //getAllMovies();
+        //getAllMovies();-- done
         //getMovieByID();
         //searchMovieByTitle();
 
@@ -72,6 +74,7 @@ public class LoginController {
     }
 
     private void handleSuccessfulLogin(UserManager um) {
+        System.out.println(um.userID());
         Users user = um.getUserDetails(um.userID());
         if (user == null) {
             System.out.println("Failed to fetch user details.");

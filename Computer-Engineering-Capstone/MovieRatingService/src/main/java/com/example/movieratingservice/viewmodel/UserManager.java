@@ -7,6 +7,8 @@ import com.example.movieratingservice.validation.InputValidator;
 public class UserManager {
 
     private FirebaseDatabaseManager db;
+
+    private String userID;
     public UserManager() {
 
         this.db = new FirebaseDatabaseManager();

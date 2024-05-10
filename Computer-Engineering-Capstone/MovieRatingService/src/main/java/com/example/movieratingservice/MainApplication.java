@@ -18,7 +18,7 @@ public class MainApplication extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/movieratingservice/SplashScreen.fxml"));
         Parent root = loader.load();
 
-        primaryStage.setScene(new Scene(root, 600, 400));
+        primaryStage.setScene(new Scene(root));
         primaryStage.setTitle("Movie App");
         primaryStage.show();
 

@@ -7,22 +7,21 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="683.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.movieratingservice.viewmodel.DashboardController">
    <left>
       <VBox prefHeight="400.0" prefWidth="184.0" spacing="20.0" BorderPane.alignment="CENTER">
 <children>
-<Button fx:id="homeBtn" mnemonicParsing="false" onAction="#switchToHome" prefHeight="48.0" prefWidth="140.0" text="Home">
+<Button fx:id="homeBtn" mnemonicParsing="false" onAction="#handleHomeButtonAction" prefHeight="48.0" prefWidth="140.0" text="Home">
     <font>
         <Font size="15.0" />
     </font>
 </Button>
-<Button fx:id="allMoviesBtn" mnemonicParsing="false" onAction="#switchToAllMovies" prefHeight="48.0" prefWidth="140.0" text="All Movies">
+<Button fx:id="allMoviesBtn" mnemonicParsing="false" onAction="#handleAllMoviesButtonAction" prefHeight="48.0" prefWidth="140.0" text="All Movies">
     <font>
         <Font size="15.0" />
     </font>
 </Button>
-<Button fx:id="myRentalBtn" layoutX="10.0" layoutY="58.0" mnemonicParsing="false" onAction="#switchToMyRents" prefHeight="48.0" prefWidth="140.0" text="My Rentals">
+<Button fx:id="myRentalBtn" layoutX="10.0" layoutY="58.0" mnemonicParsing="false" onAction="#handleMyRentalButtonAction" prefHeight="48.0" prefWidth="140.0" text="My Rentals">
     <font>
         <Font size="15.0" />
     </font>

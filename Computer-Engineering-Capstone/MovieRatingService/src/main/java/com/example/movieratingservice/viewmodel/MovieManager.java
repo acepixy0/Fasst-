@@ -1,20 +1,37 @@
 package com.example.movieratingservice.viewmodel;
 
 import com.example.movieratingservice.database.FirebaseDatabaseManager;
+import com.example.movieratingservice.model.Movies;
 import com.example.movieratingservice.util.DataCallback;
+
+import java.util.List;
 
 public class MovieManager {
 
     private FirebaseDatabaseManager db;
+
+    public void rentMovie(String movieId, DataCallback callback){
+        db.rentMovie(movieId, callback);
+    }
 
     public MovieManager() {
         this.db = new FirebaseDatabaseManager();
     }
 
     public void getAllMovies(DataCallback callback) {
+
         db.getAllMovies(callback);
     }
 
+    public void getRentedMovies(DataCallback callback) {
+
+        db.getRentedMovies(callback);
+    }
+
+
+    public List<Movies> getMovieList(){
+        return db.getMovieList();
+    }
 
     public void getMovieById(String movieId, DataCallback callback) {
         db.getMovieById(movieId, callback);
