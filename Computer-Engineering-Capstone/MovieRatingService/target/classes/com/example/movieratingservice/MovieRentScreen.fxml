@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="461.0" prefWidth="854.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.movieratingservice.viewmodel.MovieRentController">
+    <left>
+        <VBox prefHeight="400.0" prefWidth="184.0" spacing="20.0" BorderPane.alignment="CENTER">
+            <children>
+                <Button fx:id="homeBtn" mnemonicParsing="false" onAction="#handleHomeButtonAction" prefHeight="48.0" prefWidth="140.0" text="Home">
+                    <font>
+                        <Font size="15.0" />
+                    </font>
+                </Button>
+                <Button fx:id="allMoviesBtn" mnemonicParsing="false" onAction="#handleAllMoviesButtonAction" prefHeight="48.0" prefWidth="140.0" text="All Movies">
+                    <font>
+                        <Font size="15.0" />
+                    </font>
+                </Button>
+                <Button fx:id="myRentalBtn" layoutX="10.0" layoutY="58.0" mnemonicParsing="false" onAction="#handleMyRentalButtonAction" prefHeight="48.0" prefWidth="140.0" text="My Rentals">
+                    <font>
+                        <Font size="15.0" />
+                    </font>
+                </Button>
+                <Button fx:id="paymentHistoryBtn" mnemonicParsing="false" onAction="#switchToPaymenthistory" prefHeight="48.0" prefWidth="141.0" text="Payment History">
+                    <font>
+                        <Font size="15.0" />
+                    </font>
+                </Button>
+                <Button fx:id="accountSettingsBtn" mnemonicParsing="false" onAction="#switchToAccountSettings" prefHeight="48.0" prefWidth="139.0" text="Account Settings">
+                    <font>
+                        <Font size="15.0" />
+                    </font>
+                </Button>
+            </children>
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
+        </VBox>
+    </left>
+   <bottom>
+      <HBox alignment="BOTTOM_RIGHT" prefHeight="3.0" prefWidth="854.0" BorderPane.alignment="CENTER">
+         <padding>
+            <Insets bottom="10.0" right="10.0" top="10.0" />
+         </padding>
+      </HBox>
+   </bottom>
+   <center>
+      <ScrollPane prefHeight="412.0" BorderPane.alignment="CENTER">
+         <content>
+              <VBox>
+                  <padding>
+                      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                  </padding>
+                  <children>
+                      <HBox prefHeight="290.0" prefWidth="610.0" spacing="20.0">
+                          <children>
+                              <ImageView fx:id="moviePosterImg" fitHeight="264.0" fitWidth="188.0" pickOnBounds="true" preserveRatio="true" />
+                              <VBox prefHeight="241.0" prefWidth="414.0" spacing="12.0">
+                                  <children>
+                                      <Text fx:id="movieTitleTxt" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+                                          <font>
+                                              <Font name="System Bold" size="20.0" />
+                                          </font>
+                                      </Text>
+                              <GridPane hgap="5.0" vgap="5.0">
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                    <RowConstraints maxHeight="60.0" minHeight="10.0" prefHeight="30.00001983642578" vgrow="SOMETIMES" />
+                                    <RowConstraints maxHeight="60.0" minHeight="10.0" prefHeight="25.199991607666014" vgrow="SOMETIMES" />
+                                  <RowConstraints maxHeight="81.20000839233397" minHeight="10.0" prefHeight="30.399987792968744" vgrow="SOMETIMES" />
+                                  <RowConstraints maxHeight="63.600012207031256" minHeight="0.0" prefHeight="63.600012207031256" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <children>
+                                    <Label text="Price:" GridPane.rowIndex="2">
+                                       <font>
+                                          <Font name="System Italic" size="18.0" />
+                                       </font>
+                                    </Label>
+                                              <Button fx:id="rentBtn" mnemonicParsing="false" onAction="#rentAMovie" prefHeight="40.0" prefWidth="99.0" text="Rent" GridPane.rowIndex="3">
+                                       <font>
+                                          <Font name="System Bold" size="20.0" />
+                                       </font>
+                                    </Button>
+                                    <Text fx:id="moviePriceTxt" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                       <font>
+                                          <Font name="System Bold" size="18.0" />
+                                       </font>
+                                    </Text>
+                                    <Label text="Release Date:">
+                                       <font>
+                                          <Font name="System Italic" size="18.0" />
+                                       </font>
+                                    </Label>
+                                    <Text fx:id="movieReleaseDateTxt" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Text>
+                                    <Label text="Genres:" GridPane.rowIndex="1">
+                                       <font>
+                                          <Font name="System Italic" size="18.0" />
+                                       </font>
+                                    </Label>
+                                    <Text fx:id="movieGenreTxt" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                              </GridPane>
+                                  </children>
+                              </VBox>
+                          </children>
+                          <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                          </padding>
+                      </HBox>
+                  <TabPane tabClosingPolicy="UNAVAILABLE" tabMinHeight="30.0" tabMinWidth="150.0" VBox.vgrow="ALWAYS">
+                    <tabs>
+                      <Tab text="Description">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="124.0" prefWidth="610.0">
+                                 <children>
+                                    <ScrollPane layoutX="14.0" layoutY="14.0" prefHeight="84.0" prefWidth="590.0">
+                                       <content>
+                                              <Text fx:id="descriptionTxt" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+                                                  <font>
+                                                      <Font size="15.0" />
+                                                  </font>
+                                              </Text>
+                                       </content>
+                                    </ScrollPane>
+                                 </children>
+                              </AnchorPane>
+                        </content>
+                      </Tab>
+                      <Tab text="More Details">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <GridPane layoutX="14.0" layoutY="14.0" prefHeight="90.0" prefWidth="560.0">
+                                      <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                      </columnConstraints>
+                                      <rowConstraints>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                      </rowConstraints>
+                                       <children>
+                                          <Label text="Certification">
+                                             <font>
+                                                <Font size="15.0" />
+                                             </font>
+                                          </Label>
+                                          <Text fx:id="certificationTxt" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <Label text="Runtime" GridPane.rowIndex="1">
+                                             <font>
+                                                <Font size="15.0" />
+                                             </font>
+                                          </Label>
+                                          <Text fx:id="runtimeTxt" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </GridPane>
+                                 </children>
+                              </AnchorPane>
+                        </content>
+                      </Tab>
+                        <Tab text="Rating">
+                           <content>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <GridPane layoutX="14.0" layoutY="14.0" prefHeight="90.0" prefWidth="560.0">
+                                       <columnConstraints>
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                       </columnConstraints>
+                                       <rowConstraints>
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                       </rowConstraints>
+                                       <children>
+                                          <Label text="Vote Average">
+                                             <font>
+                                                <Font size="15.0" />
+                                             </font>
+                                          </Label>
+                                          <Text fx:id="voteAverageTxt" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Text>
+                                          <Label text="Vote Count" GridPane.rowIndex="1">
+                                             <font>
+                                                <Font size="15.0" />
+                                             </font>
+                                          </Label>
+                                          <Text fx:id="voteCountTxt" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </GridPane>
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </Tab>
+                    </tabs>
+                  </TabPane>
+                  </children>
+              </VBox>
+         </content>
+      </ScrollPane>
+   </center>
+   <top>
+      <HBox alignment="CENTER_RIGHT" BorderPane.alignment="CENTER">
+         <children>
+            <GridPane>
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <HBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </HBox.margin>
+            </GridPane>
+         </children>
+      </HBox>
+   </top>
+</BorderPane>
